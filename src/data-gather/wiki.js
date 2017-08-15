@@ -1,9 +1,10 @@
+// LOOK INTO WIKI API *CR
 const axios = require("axios")
-const cheerio = require("cheerio")
+const cheerio = require("cheerio") // check out x-ray (simliar to cheerio)
 
 function links(keyword) {
 
-    let HTML = '';
+    // let HTML = '';
     let keywordStr = keyword;
     if (keyword.includes(' ')) {
         keywordStr = keyword.split(' ').join('_')
@@ -12,7 +13,8 @@ function links(keyword) {
     return axios.get(`https://en.wikipedia.org/wiki/${keywordStr.toLowerCase()}`)
         .then(wbpage => {
 
-            HTML = wbpage.data;
+            // HTML = wbpage.data;
+            const HTML = wbpage.data; // *CR
             const $ = cheerio.load(HTML);
 
             let res =  { name: keyword, children: first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8) };
@@ -31,7 +33,7 @@ function first_p_links($, HTML) {
     return formatFilter(links, HTML);
 }
 
-function all_links($, HTML) {
+function all_links($, HTML) { // reformat to not take HTML 
     const links = new Set();
     $('p').find('a').each((i, n) => {
         links.add(n.attribs.href);
@@ -40,7 +42,7 @@ function all_links($, HTML) {
     return formatFilter(links, HTML);
 }
 
-function disambiguate ($, HTML) {
+function disambiguate ($, HTML) { // reformat to not take HTML 
 
     const links = new Set();
     $('ul').find('a').each((i, n) => {
@@ -55,13 +57,12 @@ function formatFilter (link_set, HTML, type) {
         const name = link.slice(6).replace(/_/g, ' ');
         return { name, link }
     })
-        .filter(sorted_arr_obj => !(/#|:|.org|.php/g).test(sorted_arr_obj.link));
-
-    if (type) return arrObjs;
-    else return create_arr_objs(arrObjs, HTML);
+    .filter(sorted_arr_obj => !(/#|:|.org|.php/g).test(sorted_arr_obj.link)); // comment AND name REGEX // REGEX IS EXPENSIVE TO BUILD
+        if (type) return arrObjs;
+        else return create_arr_objs(arrObjs, HTML);
 }
 
-function create_arr_objs(arrObjs, HTML) {
+function create_arr_objs(arrObjs, HTML) { // backslash b for REGEX
     return arrObjs
         .map(function (link_object) {
             const matches = HTML.match(new RegExp(link_object.name, 'g'));
@@ -74,6 +75,6 @@ function create_arr_objs(arrObjs, HTML) {
         .sort((a, b) => b.numOccur - a.numOccur);
 }
 
-links('*');
+// links('*'); // BREAK TEST
 
 module.exports = links;

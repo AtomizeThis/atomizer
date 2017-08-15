@@ -11,7 +11,8 @@ app.use(express.static("public"))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.post('/query', (req, res, next) => {
+// JSONP REQUEST DIRECTLY TO WIKI instead ? 
+app.post('/query', (req, res, next) => {  // change to get request with req.query
     wikiScan(req.body.query)
         .then(concepts => {
             res.json(concepts)

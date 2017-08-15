@@ -21,3 +21,5 @@ module.exports = {
     ]
   }
 };
+
+// ADD HOT LOADER (react-hot-loader?)
