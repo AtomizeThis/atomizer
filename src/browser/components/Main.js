@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios'
 import Chart from './Chart'
 import { search } from '../redux/store'
+import ForceDiagramTest from './forcetest'
 
 const App = ({ search }) => (
     <div className="wrapper" id="wrapper-large">
@@ -18,13 +19,14 @@ const App = ({ search }) => (
                     </span>
                 </div>
             </form>
+            <ForceDiagramTest />
 
-            <Chart />
+
         </div>
     </div>
 )
 
-
+// <Chart />
 const mapState = null
 const mapDispatch = { search }
 
