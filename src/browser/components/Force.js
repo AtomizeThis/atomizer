@@ -29,9 +29,6 @@ const Force = ({ graph, search }) => {
         })
 
         simulate(forces, nodeElements, textElements, linkElements, nodes, links, width, height)
-
-
-
     }
 
     return null
