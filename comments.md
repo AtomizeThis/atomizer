@@ -1,0 +1,3 @@
+- Fill out README
+- Remove .idea stuff
+- Delete assets

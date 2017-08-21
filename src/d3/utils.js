@@ -103,7 +103,7 @@ export function diagram(d3) {
     const width = window.innerWidth
     const height = window.innerHeight
 
-    const svg = d3.select('svg')
+    const svg = d3.select('svg') // <= OB/SB: could be in a ref (see Force.js)
     svg.attr('width', width).attr('height', height)
 
     $('g').length ? $('g').remove() : null

@@ -13,6 +13,7 @@ const sanitize = (query) => (
 const relate = (query) => (
     sanitize(query.replace(' ', '+'))
         .then(article =>
+            // OB/SB: nested promise chains
             axios.get(`https://en.wikipedia.org/wiki/${article}`)
                 // cheerio provides jquery functionality
                 // loads html into virtual DOM => '$'
