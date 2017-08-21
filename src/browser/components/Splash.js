@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { search } from '../redux/concepts'
 import { getSuggestions } from '../redux/suggestions'
 import $ from 'jquery'
-// import SecondSearch from './SecondSearch'
+import SecondSearch from './SecondSearch'
 
 import Force from './Force'
 

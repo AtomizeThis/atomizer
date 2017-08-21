@@ -73,6 +73,10 @@ li:hover {
 	padding-top: 100%;
 }
 
+.wrapper {
+	height: 69em;
+}
+
 /*-- ================== 1.1 BODY FONT-SIZE ACCORDING TO DEVICE WIDTH ====================== --*/
 
 @media all and (max-width:767px) {
