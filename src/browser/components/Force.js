@@ -10,7 +10,15 @@ import { simulate } from '../../d3/utils'
 class Force extends React.Component {
     componentDidMount() { createDiagram(this.props) }
     componentDidUpdate() { updateDiagram(this.props) }
-    render() { return null }
+    d3Ref = (node) => {
+      d3(node); // <= OB/SB: d3-ifies that node
+    }
+    render() {
+      return (
+        // OB/SB: refs can deal with DOM nodes directly, gets called once
+        <svg ref={this.d3Ref} />
+      );
+    }
 }
 
 const createDiagram = ({ initialize }) => initialize(d3)

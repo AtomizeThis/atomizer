@@ -16,8 +16,9 @@ const reducer = (completions = [], action) => {
 export const suggest = query => dispatch =>
     axios.get(`/suggest?input=${query}`)
         .then(res => dispatch(complete(res.data)))
-        .catch(console.error)
+        .catch(console.error) // OB/SB: react toastr can be a good way to report errors
 
+// OB/SB: unnecessary thunk
 export const clearCompletions = _ => dispatch => dispatch(clear())
 
 

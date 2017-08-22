@@ -21,6 +21,7 @@ const Query = ({ search, suggest, completions, clearCompletions }) => (
     </div>
 )
 
+// OB/SB: consider putting this into `mapDispatch`
 const handleSubmit = (event, search, clearCompletions) => {
     event.preventDefault();
     search(event.target.query.value)
