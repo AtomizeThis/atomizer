@@ -2,7 +2,7 @@ import * as d3 from 'd3'
 import React from 'react'
 
 import { connect } from 'react-redux'
-import { search, clear } from '../redux/graph'
+import { search, clear, fetch } from '../redux/graph'
 import { simulate, feature, init, draw, populate } from '../../d3/utils'
 
 class Force extends React.Component {
@@ -31,6 +31,7 @@ class Force extends React.Component {
         this.draw = draw.bind(this)
         this.simulate = simulate.bind(this)
         this.search = this.props.search
+        this.fetch = this.props.fetch
 
         // simulation setup with all forces
         this.linkForce = this.init(feature.LINK_FORCE)
@@ -45,7 +46,7 @@ class Force extends React.Component {
         this.nodes = []
         this.links = []
 
-        this.modal = true;
+        this.modal = false;
     }
 
     handleSubmit(event) {
@@ -82,5 +83,5 @@ class Force extends React.Component {
 }
 
 const mapProps = ({ graph }) => ({ graph })
-const mapDispatch = { search, clear }
+const mapDispatch = { search, clear, fetch }
 export default connect(mapProps, mapDispatch)(Force)

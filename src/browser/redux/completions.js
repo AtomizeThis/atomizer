@@ -1,6 +1,5 @@
 import axios from "axios"
 
-
 const SUGGEST = 'AUTO_COMPLETE'
 const CLEAR = 'CLEAR_COMPLETIONS'
 

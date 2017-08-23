@@ -1,11 +1,13 @@
 import axios from "axios"
 import foc from './utils' // findOrCreate
 
-const UPDATE = 'UPDATE_KNOWLEDGE_GRAPH';
+const UPDATE = 'UPDATE_KNOWLEDGE_GRAPH'
 const CLEAR = 'CLEAR_KNOWLEDGE_GRAPH'
+const FETCH_INFO = 'FETCH_MODAL_INFORMATION'
 
 const update = parentNode => ({ type: UPDATE, parentNode })
 export const clear = _ => ({ type: CLEAR })
+const info = info => ({ type: FETCH_INFO, info })
 
 const initialState = {
     // total graph
@@ -18,7 +20,9 @@ const initialState = {
         links: [],
         // and the nodes
         nodes: {}
-    }
+    },
+    // selected node
+    selected: {}
 }
 
 const reducer = (graph = initialState, action) => {
@@ -40,6 +44,10 @@ const reducer = (graph = initialState, action) => {
             return newGraph
         case CLEAR:
             return initialState
+
+        case FETCH_INFO:
+            return Object.assign({}, graph, { selected: action.info })
+
     }
     return graph
 }
@@ -47,6 +55,12 @@ const reducer = (graph = initialState, action) => {
 export const search = query => dispatch => {
     axios.get(`/wiki?input=${query}`)
         .then(res => dispatch(update(res.data)))
+        .catch(console.error)
+}
+
+export const fetch = article => dispatch => {
+    axios.get(`/data?input=${article}`)
+        .then(res => dispatch(info(res.data)))
         .catch(console.error)
 }
 
