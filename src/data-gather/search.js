@@ -31,7 +31,7 @@ const relate = (query) => (
                     return bundle(article,
                         isAmbiguous($)
                             // if article is ambigous return possibilites
-                            ? disambiguate($).slice(0, 8)
+                            ? disambiguate($)
                             // otherwise return related articles
                             : rank(relations($), html))
                 })
