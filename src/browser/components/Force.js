@@ -5,9 +5,6 @@ import { connect } from 'react-redux'
 import { search, clear } from '../redux/graph'
 import { simulate, feature, init, draw, populate } from '../../d3/utils'
 
-
-import Modal from './Modal'
-
 class Force extends React.Component {
 
     constructor() {
@@ -47,6 +44,8 @@ class Force extends React.Component {
 
         this.nodes = []
         this.links = []
+
+        this.modal = true;
     }
 
     handleSubmit(event) {
@@ -58,9 +57,26 @@ class Force extends React.Component {
 
     render() { 
         return (
-            <form onSubmit={event => this.handleSubmit(event)}>
-                <button type="submit">Clear Now</button>
-            </form>
+            <div>
+                <form onSubmit={event => this.handleSubmit(event)}>
+                    <button type="submit">Clear Now</button>
+                </form>
+                <div className="modal" style={{display: this.modal ? 'block' : 'none'}} id="myModal">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <span className="close" onClick={this.modal = false}>&times;</span>
+                            <h2>The Real Freakin' Deal</h2>
+                        </div>
+                        <div className="modal-body">
+                            <p>Some text in the Modal Body</p>
+                            <p>Some other text...</p>
+                        </div>
+                        <div className="modal-footer">
+                            <h3>Modal Footer</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
         ) 
     }
 }

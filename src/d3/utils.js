@@ -53,7 +53,8 @@ export function draw() {
     )
 
     nodeEntry.call(this.dragDrop)
-    nodeEntry.on('click', node => this.search(node.label))
+    nodeEntry.on('click', node => this.modal = true)
+    nodeEntry.on('dblclick', node => this.search(node.label))
 
     let [textEntry, textElements] = domify(
         this.textGroup,

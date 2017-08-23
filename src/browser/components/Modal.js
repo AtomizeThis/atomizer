@@ -1,36 +1,40 @@
 import React from 'react';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 // import { search } from '../redux/concepts'
 // import { getSuggestions } from '../redux/suggestions'
 
-const Modal = () => (
-        <div className="container">
-
-            {/*CURRENTLY TRIGGERED BY A BUTTON*/}
-            <button type="button" className="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
-
-            <div className="modal fade" id="myModal" role="dialog">
-                <div className="modal-dialog">
-
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <button type="button" className="close" data-dismiss="modal">&times;</button>
-                            <h4 className="modal-title">Floyd Mayweather Jr.</h4>
-                        </div>
-                        <div className="modal-body">
-                            <p>Floyd Mayweather Jr. is, undoubtedly, a trash human.</p>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-
+const Modal = (props) => (
+        <div className="modal" style={{display: props.visible ? 'block' : 'none'}} id="myModal">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <span className="close">&times;</span>
+                    <h2>The Real Freakin' Deal</h2>
+                </div>
+                <div className="modal-body">
+                    <p>Some text in the Modal Body</p>
+                    <p>Some other text...</p>
+                </div>
+                <div className="modal-footer">
+                    <h3>Modal Footer</h3>
                 </div>
             </div>
         </div>
 )
 
-const mapState = null
-const mapDispatch = null
-export default connect(mapState, mapDispatch)(Modal);
+export default Modal
+
+// class Test extends Component {
+//     render() {
+//         return (
+//             <div>
+//                 <MyComponent text={'1'} />
+//                 <MyComponent text={'2'} />
+//             </div>
+//         );
+//     }
+// }
+
+// const mapState = null
+// const mapDispatch = null
+// export default connect(mapState, mapDispatch)(Modal);
 
