@@ -7,11 +7,6 @@ import { simulate, feature, init, draw, populate } from '../../d3/utils'
 
 class Force extends React.Component {
 
-    constructor() {
-        super()
-        this.handleSubmit = this.handleSubmit.bind(this)
-    }
-
     componentDidUpdate() {
         this.populate(this.props.graph)
         this.draw()
@@ -19,19 +14,20 @@ class Force extends React.Component {
     }
 
     componentDidMount() {
-        console.log('MOUNTING')
         this.width = window.innerWidth
         this.height = window.innerHeight
 
         this.svg = d3.select('svg')
         this.svg.attr('width', this.width).attr('height', this.height)
 
+        this.handleSubmit = this.handleSubmit.bind(this)
         this.init = init.bind(this)
         this.populate = populate.bind(this)
         this.draw = draw.bind(this)
         this.simulate = simulate.bind(this)
         this.search = this.props.search
         this.fetch = this.props.fetch
+        
 
         // simulation setup with all forces
         this.linkForce = this.init(feature.LINK_FORCE)
@@ -46,7 +42,7 @@ class Force extends React.Component {
         this.nodes = []
         this.links = []
 
-        this.modal = false;
+        this.modal = false
     }
 
     handleSubmit(event) {

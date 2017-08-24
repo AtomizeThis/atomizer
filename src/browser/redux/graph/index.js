@@ -7,7 +7,7 @@ const FETCH_INFO = 'FETCH_MODAL_INFORMATION'
 
 const update = parentNode => ({ type: UPDATE, parentNode })
 export const clear = _ => ({ type: CLEAR })
-const info = info => ({ type: FETCH_INFO, info })
+const blurb = info => ({ type: FETCH_INFO, info })
 
 const initialState = {
     // total graph
@@ -60,7 +60,7 @@ export const search = query => dispatch => {
 
 export const fetch = article => dispatch => {
     axios.get(`/data?input=${article}`)
-        .then(res => dispatch(info(res.data)))
+        .then(res => dispatch(blurb(res.data)))
         .catch(console.error)
 }
 
