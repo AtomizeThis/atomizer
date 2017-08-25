@@ -1,11 +1,11 @@
 import axios from "axios"
 
 
-const SUGGEST = 'AUTO_COMPLETE'
-const CLEAR = 'CLEAR_COMPLETIONS'
+export const SUGGEST = 'AUTO_COMPLETE'
+export const CLEAR = 'CLEAR_COMPLETIONS'
 
-const complete = completions => ({ type: SUGGEST, completions })
-const clear = _ => ({ type: CLEAR })
+export const complete = completions => ({ type: SUGGEST, completions })
+export const clear = _ => ({ type: CLEAR })
 
 const reducer = (completions = [], action) => {
     if (action.type === SUGGEST) return action.completions

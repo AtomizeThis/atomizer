@@ -1,11 +1,11 @@
 import axios from "axios"
 import foc from './utils' // findOrCreate
 
-const UPDATE = 'UPDATE_KNOWLEDGE_GRAPH';
-const CLEAR = 'CLEAR_KNOWLEDGE_GRAPH'
+export const UPDATE = 'UPDATE_KNOWLEDGE_GRAPH';
+export const CLEARGRAPH = 'CLEAR_KNOWLEDGE_GRAPH'
 
-const update = parentNode => ({ type: UPDATE, parentNode })
-export const clear = _ => ({ type: CLEAR })
+export const update = parentNode => ({ type: UPDATE, parentNode })
+export const clearGraph = _ => ({ type: CLEARGRAPH })
 
 const initialState = () => ({
     // total graph
@@ -38,7 +38,7 @@ const reducer = (graph = initialState(), action) => {
             newGraph.updated.parent = parent
 
             return newGraph
-        case CLEAR:
+        case CLEARGRAPH:
             return initialState()
     }
     return graph

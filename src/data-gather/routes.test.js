@@ -6,7 +6,7 @@ const request = require('supertest-as-promised');
 var Promise = require("bluebird");
 
 
-const linkSearch = require('../src/data-gather/wiki')
+const linkSearch = require('../data-gather/wiki')
 
 
 

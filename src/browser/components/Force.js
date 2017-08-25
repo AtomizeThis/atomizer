@@ -3,7 +3,7 @@ import React from 'react'
 import $ from 'jquery'
 
 import { connect } from 'react-redux'
-import { search, clear } from '../redux/graph'
+import { search, clearGraph } from '../redux/graph'
 import { simulate, feature, init, draw, populate } from '../../d3/utils'
 
 import Modal from './Modal'
@@ -53,7 +53,7 @@ class Force extends React.Component {
         event.preventDefault()
         this.nodes = []
         this.links = []
-        this.props.clear()
+        this.props.clearGraph()
         $("html, body").animate({ scrollTop: 0 }, 500);
     }
 
