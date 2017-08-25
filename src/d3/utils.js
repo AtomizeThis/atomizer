@@ -1,18 +1,25 @@
-import $ from 'jquery'
+import * as d3 from 'd3'
+
 
 export function populate(graph) {
-    const nodes = []
-    const links = []
-    graph.forEach((concept, group) => {
-        const center = { id: concept.name.toLowerCase(), group, label: concept.name.toUpperCase(), level: 1 }
-        concept.children.forEach(relation => {
-            links.push({ target: center.id, source: relation.name.toLowerCase(), strength: 0.1 })
-            nodes.push({ id: relation.name.toLowerCase(), group: 0, label: relation.name, level: 2 })
-        })
-        nodes.push(center)
-    })
 
-    return [nodes, links]
+        this.links.push(...graph.updated.links.map(
+            // links for d3 require special form
+            source => ({
+                target: graph.updated.parent.id,
+                source: source.id,
+                strength: 0.1
+            })
+        ))
+
+        this.nodes.push(...Object.values(graph.updated.nodes).map(
+            // nodes for d3 require special form
+            node => ({
+                id: node.id,
+                label: node.id,
+                level: 2
+            })
+        ))
 }
 
 function domify(group, items, attributes, selection, tagFn) {
@@ -28,111 +35,105 @@ function domify(group, items, attributes, selection, tagFn) {
     return [entryPoint, elements]
 }
 
-export function simulate(simulation, nodeElements, textElements, linkElements, nodes, links) {
+export function draw() {
+    let [linkEntry, linkElements] = domify(
+        this.linkGroup,
+        this.links,
+        { 'stroke-width': 1, 'stroke': 'rgba(234, 220, 233, 0.5)' },
+        'line',
+        link => link.target.id + link.source.id
+    )
 
-    simulation.nodes(nodes).on('tick', () => {
-        nodeElements
-            .attr('cx', node => node.x)
-            .attr('cy', node => node.y)
-        textElements
-            .attr('x', node => node.x)
-            .attr('y', node => node.y)
-        linkElements
+    let [nodeEntry, nodeElements] = domify(
+        this.nodeGroup,
+        this.nodes,
+        { 'r': 10, 'fill': node => node.level === 1 ? '#F9D463' : '#7084a3' },
+        'circle',
+        node => node.id
+    )
+
+    nodeEntry.call(this.dragDrop)
+    nodeEntry.on('click', node => this.search(node.label))
+
+    let [textEntry, textElements] = domify(
+        this.textGroup,
+        this.nodes,
+        { 'font-size': 13, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
+        'text',
+        node => node.id
+    )
+
+    textEntry.text(node => node.label)
+
+    this.linkElements = linkEntry.merge(linkElements)
+    this.nodeElements = nodeEntry.merge(nodeElements)
+    this.textElements = textEntry.merge(textElements)
+
+}
+
+
+export function simulate() {
+
+    this.simulation.nodes(this.nodes).on('tick', () => {
+        this.nodeElements
+            .attr('cx', node => node.x = Math.max(20, Math.min(this.width - 20, node.x)))
+            .attr('cy', node => node.y = Math.max(20, Math.min(this.height - 20, node.y)))
+        this.textElements
+            .attr('x', node => node.x = Math.abs(Math.max(node.x, Math.min(this.width - node.x, node.x))))
+            .attr('y', node => node.y = Math.abs(Math.max(node.y, Math.min(this.height - node.y, node.y))))
+        this.linkElements
             .attr('x1', link => link.source.x)
             .attr('y1', link => link.source.y)
             .attr('x2', link => link.target.x)
             .attr('y2', link => link.target.y)
     })
 
-    simulation.force('link').links(links)
-    simulation.alphaTarget(0.7).restart()
+    this.simulation.force('link').links(this.links)
+    this.simulation.alphaTarget(0.7).restart()
 }
 
-export function update(view) {
+const LINK_FORCE = 'LINK_FORCE'
+const SIMULATION = 'SIMULATION'
+const DRAG_DROP = 'DRAG_DROP'
 
-    let [linkEntry, linkElements] = domify(
-        view.linkGroup,
-        view.links,
-        { 'stroke-width': 1, 'stroke': 'rgba(50, 50, 50, 0.2)' },
-        'line',
-        link => link.target.id + link.source.id
-    )
-
-    let [nodeEntry, nodeElements] = domify(
-        view.nodeGroup,
-        view.nodes,
-        { 'r': 10, 'fill': node => node.level === 1 ? 'red' : 'gray' },
-        'circle',
-        node => node.id
-    )
-
-    nodeEntry.call(view.dragDrop)
-
-    let [textEntry, textElements] = domify(
-        view.textGroup,
-        view.nodes,
-        { 'font-size': 15, 'dx': 15, 'dy': 4 },
-        'text',
-        node => node.id)
-
-    textEntry.text(node => node.label)
-
-    linkElements = linkEntry.merge(linkElements)
-    nodeElements = nodeEntry.merge(nodeElements)
-    textElements = textEntry.merge(textElements)
-
-    return [linkElements, nodeElements, textElements]
+export const feature = {
+    LINK_FORCE,
+    SIMULATION,
+    DRAG_DROP
 }
 
-export function init(d3) {
-    const width = window.innerWidth
-    const height = window.innerHeight
 
-    const svg = d3.select('svg')
-    svg.attr('width', width).attr('height', height)
+export function init(feature) {
+    switch (feature) {
+        case LINK_FORCE:
+            return d3.forceLink()
+                .id(link => link.id)
+                .strength(link => link.strength)
+                .distance(75)
 
-    $('g').length ? $('g').remove() : null
-    // we use svg groups to logically group the elements together
-    const linkGroup = svg.append('g').attr('class', 'links')
-    const nodeGroup = svg.append('g').attr('class', 'nodes')
-    const textGroup = svg.append('g').attr('class', 'texts')
+        case SIMULATION:
+            return d3.forceSimulation()
+                .force('link', this.linkForce)
+                .force('charge', d3.forceManyBody().strength(-100).distanceMax(300))
+                .force('center', d3.forceCenter(this.width / 2, this.height / 2))
 
-    // simulation setup with all forces
-    const linkForce = d3
-        .forceLink()
-        .id(function (link) { return link.id })
-        .strength(function (link) { return link.strength })
+        case DRAG_DROP:
+            return d3.drag()
+                .on('start', node => {
+                    node.fx = node.x
+                    node.fy = node.y
+                }).on('drag', node => {
+                    this.simulation.alphaTarget(0.7).restart()
+                    node.fx = d3.event.x
+                    node.fy = d3.event.y
+                }).on('end', node => {
+                    if (!d3.event.active) {
+                        this.simulation.alphaTarget(0)
+                    }
+                    node.fx = null
+                    node.fy = null
+                })
 
-    const simulation = d3
-        .forceSimulation()
-        .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-50))
-        .force('center', d3.forceCenter(width / 2, height / 2))
-
-    const dragDrop = d3.drag().on('start', function (node) {
-        node.fx = node.x
-        node.fy = node.y
-    }).on('drag', function (node) {
-        simulation.alphaTarget(0.7).restart()
-        node.fx = d3.event.x
-        node.fy = d3.event.y
-    }).on('end', function (node) {
-        if (!d3.event.active) {
-            simulation.alphaTarget(0)
-        }
-        node.fx = null
-        node.fy = null
-    })
-
-    return [
-        width,
-        height,
-        svg,
-        linkGroup,
-        nodeGroup,
-        textGroup,
-        linkForce,
-        simulation,
-        dragDrop
-    ]
+        default: throw new Error(`Cannot init ${feature}`)
+    }
 }

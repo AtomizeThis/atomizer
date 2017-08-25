@@ -1,5 +1,6 @@
-import { combineReducers } from 'redux';
-import graph from './concepts';
-import suggestions_reducer from './suggestions';
+import { combineReducers } from 'redux'
+import graph from './graph'
+import completions from './completions'
 
-export default combineReducers({ graph, suggestions_reducer });
+
+export default combineReducers({ graph, completions });
