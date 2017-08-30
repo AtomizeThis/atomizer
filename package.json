@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server/index.js",
     "start-dev": "webpack -w & nodemon -e js,html ./server/index.js",
-    "test": "mocha ./tests/*.spec.js --watch --compilers js:babel-register",
+    "test": "mocha --compilers js:babel-register --require babel-polyfill --watch-extensions js,jsx src/**/*.test.js",    
     "build": "webpack"
   },
   "keywords": [],

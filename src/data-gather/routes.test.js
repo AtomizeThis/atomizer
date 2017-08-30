@@ -6,7 +6,7 @@ const request = require('supertest-as-promised');
 var Promise = require("bluebird");
 
 
-const linkSearch = require('../data-gather/wiki')
+const linkSearch = require('./search')
 
 
 
@@ -22,49 +22,49 @@ describe('linkSearch function', function () {
   it('Should return an array of objects that omits duplicates', function () {
     var size1 = linkSearch(keyword1)
     .then((result) => {      
-      return result.children.length
+      return result.relations.length
     })
     var filteredSize1 = linkSearch(keyword1)
       .then((result) => {
-        setLength = new Set(result.children);      
+        setLength = new Set(result.relations);      
         return setLength.size
       })
 
     // return expect(Promise.resolve(filteredSize1)).to.eventually.equal(9)
     return Promise.join(filteredSize1, size1, function(test, expected) { 
-      return expect(test).to.deep.equal(expected)})
+       return expect(test).to.deep.equal(expected)})
   })
 
-  it('Should return an array of objects that omits duplicates', function () {
+  xit('Should return an array of objects that omits duplicates', function () {
     var size2 = linkSearch(keyword2)
     .then((result) => {      
-      return result.children.length
+      return result.relations.length
     })
     var filteredSize2 = linkSearch(keyword2)
       .then((result) => {
-        setLength = new Set(result.children);      
+        setLength = new Set(result.relations);      
         return setLength.size
       })
 
     // return expect(Promise.resolve(filteredSize1)).to.eventually.equal(9)
     return Promise.join(filteredSize2, size2, function(test, expected) { 
-      return expect(test).to.deep.equal(expected)})
+      expect(test).to.deep.equal(expected)})
   })
 
-  it('Should return an array of objects that omits duplicates', function () {
+  xit('Should return an array of objects that omits duplicates', function () {
     var size3 = linkSearch(keyword3)
     .then((result) => {      
-      return result.children.length
+      return result.relations.length
     })
     var filteredSize3 = linkSearch(keyword3)
       .then((result) => {
-        setLength = new Set(result.children);      
+        setLength = new Set(result.relations);      
         return setLength.size
       })
 
     // return expect(Promise.resolve(filteredSize3)).to.eventually.equal(9)
     return Promise.join(filteredSize3, size3, function(test, expected) { 
-      return expect(test).to.deep.equal(expected)})
+      expect(test).to.deep.equal(expected)})
   })
 
 })

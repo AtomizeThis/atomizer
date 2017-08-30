@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 import { createStore } from 'redux'
 
-import { complete, clear, SUGGEST, CLEAR } from '../src/browser/redux/completions'
-import { update, clearGraph, UPDATE, CLEARGRAPH } from '../src/browser/redux/graph'
-import mainReducer from '../src/redux'
+import { complete, clear, SUGGEST, CLEAR } from './completions'
+import { update, clearGraph, UPDATE, CLEARGRAPH } from './graph'
+import mainReducer from './index'
 
 const completions1 = ['completion1', 'completion2', 'completion3']
 const completions2 = ['completion4', 'completion5', 'completion6']
