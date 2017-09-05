@@ -14,6 +14,10 @@ describe('linkSearch function', function () {
   /**
     *1.It should return an array of results that omits duplicates
   */
+  //Since the linkSearch function makes a request to the external wikipedia API it takes longer
+  //than the standard 2 seconds alotted by mocha. So we extend to 5 seconds.
+  this.timeout(5000);
+
   const keyword1 = 'As ia'
   const keyword2 = 'Africa'
   const keyword3 = 'Floyd Mayweather_'
@@ -24,6 +28,7 @@ describe('linkSearch function', function () {
     .then((result) => {      
       return result.relations.length
     })
+    
     var filteredSize1 = linkSearch(keyword1)
       .then((result) => {
         setLength = new Set(result.relations);      
@@ -32,10 +37,10 @@ describe('linkSearch function', function () {
 
     // return expect(Promise.resolve(filteredSize1)).to.eventually.equal(9)
     return Promise.join(filteredSize1, size1, function(test, expected) { 
-       return expect(test).to.deep.equal(expected)})
+       return expect(test).to.equal(expected)})
   })
 
-  xit('Should return an array of objects that omits duplicates', function () {
+  it('Should return an array of objects that omits duplicates', function () {
     var size2 = linkSearch(keyword2)
     .then((result) => {      
       return result.relations.length
@@ -51,7 +56,7 @@ describe('linkSearch function', function () {
       expect(test).to.deep.equal(expected)})
   })
 
-  xit('Should return an array of objects that omits duplicates', function () {
+  it('Should return an array of objects that omits duplicates', function () {
     var size3 = linkSearch(keyword3)
     .then((result) => {      
       return result.relations.length
